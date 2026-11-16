@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ভিডিও হাব</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="logo" href="#home"><span class="logo-dot"></span>ভিডিও<b>হাব</b></a>
+  <nav class="tabs" id="tabs">
+    <button data-tab="home" class="active">🏠 হোম</button>
+    <button data-tab="upload">⬆️ আপলোড</button>
+    <button data-tab="ads">📢 অ্যাড সেটিংস</button>
+    <button data-tab="dashboard">📊 ড্যাশবোর্ড</button>
+    <button data-tab="refer">🔗 রেফার</button>
+  </nav>
+  <div class="userchip" id="userChip"></div>
+</header>
+
+<main class="container">
+
+  <!-- হোম -->
+  <section id="tab-home" class="tab active">
+    <div class="section-head">
+      <h2>সব ভিডিও</h2>
+      <input type="search" id="search" placeholder="ভিডিও খুঁজুন...">
+    </div>
+    <div class="grid" id="videoGrid"></div>
+    <div class="empty hidden" id="emptyHome">
+      <div class="empty-icon">🎬</div>
+      <p>এখনো কোনো ভিডিও নেই।</p>
+      <button class="btn" data-goto="upload">প্রথম ভিডিও আপলোড করুন</button>
+    </div>
+  </section>
+
+  <!-- আপলোড -->
+  <section id="tab-upload" class="tab">
+    <h2>নতুন ভিডিও আপলোড</h2>
+    <form id="uploadForm" class="card form">
+      <label class="dropzone" id="dropzone">
+        <input type="file" id="videoFile" accept="video/*" hidden>
+        <span class="dz-icon">📁</span>
+        <span id="dzText">ভিডিও ফাইল বেছে নিন (ক্লিক করুন বা টেনে আনুন)</span>
+      </label>
+
+      <div class="two hidden" id="thumbArea">
+        <div>
+          <label class="lbl">থামবেল বেছে নিন</label>
+          <video id="prevVideo" muted playsinline preload="metadata"></video>
+          <input type="range" id="frameSlider" min="0" max="100" step="0.1" value="0">
+          <div class="row">
+            <button type="button" class="btn ghost small" id="captureBtn">এই ফ্রেম থামবেল করুন</button>
+            <label class="btn ghost small">নিজের ছবি দিন
+              <input type="file" id="thumbFile" accept="image/*" hidden>
+            </label>
+          </div>
+        </div>
+        <div>
+          <label class="lbl">থামবেল প্রিভিউ</label>
+          <div class="thumb-prev"><img id="thumbPrev" alt=""></div>
+        </div>
+      </div>
+
+      <label class="lbl">ভিডিওর শিরোনাম</label>
+      <input type="text" id="vTitle" placeholder="শিরোনাম লিখুন" maxlength="120" required>
+
+      <label class="lbl">বর্ণনা</label>
+      <textarea id="vDesc" rows="3" placeholder="ভিডিও সম্পর্কে লিখুন (ঐচ্ছিক)"></textarea>
+
+      <label class="lbl">এই ভিডিওতে কোন অ্যাড চলবে?</label>
+      <div class="checks">
+        <label><input type="checkbox" id="adPre" checked> শুরুতে</label>
+        <label><input type="checkbox" id="adMid" checked> মাঝে</label>
+        <label><input type="checkbox" id="adPost" checked> শেষে</label>
+      </div>
+
+      <button class="btn" type="submit" id="saveBtn">ভিডিও পাবলিশ করুন</button>
+    </form>
+  </section>
+
+  <!-- অ্যাড সেটিংস -->
+  <section id="tab-ads" class="tab">
+    <h2>অ্যাড সেটিংস</h2>
+    <p class="muted">শুরু, মাঝ ও শেষ — প্রতিটির জন্য আলাদা অ্যাড দিন। দর্শক অ্যাড শেষ না হওয়া পর্যন্ত ভিডিও দেখতে পারবেন না (ডিফল্ট ৫ সেকেন্ড)।</p>
+    <div id="adSlots" class="adgrid"></div>
+  </section>
+
+  <!-- ড্যাশবোর্ড -->
+  <section id="tab-dashboard" class="tab">
+    <h2>ড্যাশবোর্ড</h2>
+    <div class="stats" id="stats"></div>
+    <div class="two">
+      <div class="card">
+        <h3>ভিডিও অনুযায়ী ভিউ</h3>
+        <div class="table-wrap"><table id="videoTable"></table></div>
+      </div>
+      <div class="card">
+        <h3>সাম্প্রতিক ইউজার</h3>
+        <div class="table-wrap"><table id="userTable"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- রেফার -->
+  <section id="tab-refer" class="tab">
+    <h2>রেফার লিংক</h2>
+    <div class="card">
+      <label class="lbl">আপনার রেফার লিংক</label>
+      <div class="copybox">
+        <input type="text" id="refLink" readonly>
+        <button class="btn" id="copyRef">কপি</button>
+      </div>
+      <p class="muted">এই লিংকে ঢুকে কেউ সাইটে যুক্ত হলে সে আপনার রেফারেল হিসেবে গণ্য হবে।</p>
+      <div class="stats small" id="refStats"></div>
+    </div>
+    <div class="card">
+      <h3>রেফার লিডারবোর্ড</h3>
+      <div class="table-wrap"><table id="refTable"></table></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ভিডিও প্লেয়ার -->
+<div class="modal hidden" id="playerModal">
+  <div class="player-box">
+    <button class="close" id="closePlayer" aria-label="বন্ধ করুন">✕</button>
+    <div class="stage">
+      <video id="mainVideo" controls playsinline></video>
+      <div class="adlayer hidden" id="adLayer">
+        <div class="adtag" id="adLabel">অ্যাড</div>
+        <div class="adcontent" id="adContent"></div>
+        <div class="adcount" id="adCount"></div>
+      </div>
+    </div>
+    <h3 id="pTitle"></h3>
+    <p class="muted" id="pMeta"></p>
+    <p id="pDesc"></p>
+  </div>
+</div>
+
+<!-- জয়েন মডাল -->
+<div class="modal hidden" id="joinModal">
+  <form class="join-box" id="joinForm">
+    <div class="logo big"><span class="logo-dot"></span>ভিডিও<b>হাব</b></div>
+    <h3>স্বাগতম! সাইটে যুক্ত হোন</h3>
+    <p class="muted" id="joinNote">আপনার নাম লিখে শুরু করুন।</p>
+    <input type="text" id="joinName" placeholder="আপনার নাম" maxlength="40" required>
+    <button class="btn" type="submit">যুক্ত হোন</button>
+  </form>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
