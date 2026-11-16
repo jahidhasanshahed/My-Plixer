@@ -1,160 +1,486 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ভিডিও হাব</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My-Plixer — Jahid Hasan</title>
+  <meta name="description" content="My-Plixer is a curated cinema archive by Jahid Hasan. Public visitors can watch anytime while creator uploads stay private." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#featured" class="brand">
+        <span class="brand-mark">▶</span>
+        <span>
+          <span class="brand-title">My-Plixer</span>
+          <span id="navOwnerName" class="brand-sub">Owner: Jahid Hasan</span>
+        </span>
+      </a>
 
-<header class="topbar">
-  <a class="logo" href="#home"><span class="logo-dot"></span>ভিডিও<b>হাব</b></a>
-  <nav class="tabs" id="tabs">
-    <button data-tab="home" class="active">🏠 হোম</button>
-    <button data-tab="upload">⬆️ আপলোড</button>
-    <button data-tab="ads">📢 অ্যাড সেটিংস</button>
-    <button data-tab="dashboard">📊 ড্যাশবোর্ড</button>
-    <button data-tab="refer">🔗 রেফার</button>
-  </nav>
-  <div class="userchip" id="userChip"></div>
-</header>
+      <nav class="nav-links" aria-label="Primary Navigation">
+        <a href="#featured">Featured</a>
+        <a href="#library">Library</a>
+        <a href="#referrals">Referrals</a>
+        <a href="#about">About</a>
+      </nav>
 
-<main class="container">
-
-  <!-- হোম -->
-  <section id="tab-home" class="tab active">
-    <div class="section-head">
-      <h2>সব ভিডিও</h2>
-      <input type="search" id="search" placeholder="ভিডিও খুঁজুন...">
+      <div class="nav-actions">
+        <span id="refChip" class="ref-chip hidden"></span>
+        <span id="ownerBadge" class="owner-badge hidden">Creator Mode</span>
+        <button id="btnSignIn" type="button" class="btn btn-primary btn-sm">Creator Sign In</button>
+        <button id="btnSignOut" type="button" class="btn btn-ghost btn-sm hidden">Sign Out</button>
+      </div>
     </div>
-    <div class="grid" id="videoGrid"></div>
-    <div class="empty hidden" id="emptyHome">
-      <div class="empty-icon">🎬</div>
-      <p>এখনো কোনো ভিডিও নেই।</p>
-      <button class="btn" data-goto="upload">প্রথম ভিডিও আপলোড করুন</button>
+  </header>
+
+  <main>
+    <div class="container">
+      <div id="authNotice" class="notice-banner hidden">
+        <span>Signed in as <strong id="signedInEmail"></strong>. Only verified owner <code>jahidhasan112328@gmail.com</code> can manage this studio.</span>
+        <button id="btnSwitchAccount" type="button" class="btn btn-sm btn-ghost">Switch Account</button>
+      </div>
+
+      <div id="refBanner" class="ref-banner hidden">
+        <span>Welcome to My-Plixer via invite code <strong id="refBannerCode"></strong> — all published videos are unlocked free.</span>
+      </div>
     </div>
-  </section>
 
-  <!-- আপলোড -->
-  <section id="tab-upload" class="tab">
-    <h2>নতুন ভিডিও আপলোড</h2>
-    <form id="uploadForm" class="card form">
-      <label class="dropzone" id="dropzone">
-        <input type="file" id="videoFile" accept="video/*" hidden>
-        <span class="dz-icon">📁</span>
-        <span id="dzText">ভিডিও ফাইল বেছে নিন (ক্লিক করুন বা টেনে আনুন)</span>
-      </label>
+    <section id="featured" class="hero-section">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Personal Cinema Archive</span>
+          <h1 id="heroChannelTitle" class="hero-title">My-Plixer</h1>
+          <p id="heroTagline" class="hero-tagline">Curated films, edits, and personal video stories.</p>
+          <p id="heroBioPreview" class="hero-bio">
+            My-Plixer is a private-creator, public-viewer video showcase. Visitors from anywhere can stream and explore every published film without an account.
+          </p>
 
-      <div class="two hidden" id="thumbArea">
-        <div>
-          <label class="lbl">থামবেল বেছে নিন</label>
-          <video id="prevVideo" muted playsinline preload="metadata"></video>
-          <input type="range" id="frameSlider" min="0" max="100" step="0.1" value="0">
-          <div class="row">
-            <button type="button" class="btn ghost small" id="captureBtn">এই ফ্রেম থামবেল করুন</button>
-            <label class="btn ghost small">নিজের ছবি দিন
-              <input type="file" id="thumbFile" accept="image/*" hidden>
-            </label>
+          <div class="hero-ctas">
+            <button id="btnWatchFeatured" type="button" class="btn btn-primary">▶ Watch Featured</button>
+            <a href="#library" class="btn btn-ghost">Browse Library</a>
+            <a href="#referrals" class="btn btn-ghost">Recommended Links</a>
+          </div>
+
+          <div class="stats-strip">
+            <div class="stat-box">
+              <div id="statVideos" class="stat-val">0</div>
+              <div class="stat-lbl">Published Films</div>
+            </div>
+            <div class="stat-box">
+              <div id="statCategories" class="stat-val">0</div>
+              <div class="stat-lbl">Categories</div>
+            </div>
+            <div class="stat-box">
+              <div id="statAds" class="stat-val">5s / 5s</div>
+              <div class="stat-lbl">Pre / Mid Roll</div>
+            </div>
+            <div class="stat-box">
+              <div id="statAccess" class="stat-val">Public Free</div>
+              <div class="stat-lbl">Access Level</div>
+            </div>
           </div>
         </div>
-        <div>
-          <label class="lbl">থামবেল প্রিভিউ</label>
-          <div class="thumb-prev"><img id="thumbPrev" alt=""></div>
+
+        <article id="heroFeaturedCard" class="hero-card" role="button" tabindex="0">
+          <div class="hero-card-media">
+            <img id="heroFeaturedThumb" alt="Featured Video Poster" />
+            <div class="play-overlay"><span>▶</span></div>
+          </div>
+          <div class="hero-card-body">
+            <span class="cat-tag">Featured Spotlight</span>
+            <h2 id="heroFeaturedTitle">Showcase Ready for Your First Film</h2>
+            <p id="heroFeaturedMeta" class="muted">Sign in as verified creator to publish YouTube or direct MP4 videos.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="container">
+      <div id="creatorToolbar" class="creator-toolbar hidden">
+        <div class="toolbar-left">
+          <button id="btnAddVideo" type="button" class="btn btn-primary btn-sm">+ Add Video</button>
+          <button id="btnAdSettings" type="button" class="btn btn-ghost btn-sm">Ad Settings (5s/5s)</button>
+          <button id="btnReferralSetup" type="button" class="btn btn-ghost btn-sm">Referral Links</button>
+          <button id="btnChannelProfile" type="button" class="btn btn-ghost btn-sm">Channel Bio</button>
+        </div>
+        <div class="toolbar-right vis-filters">
+          <button type="button" class="vis-btn active" data-vis="all">All</button>
+          <button type="button" class="vis-btn" data-vis="public">Public</button>
+          <button type="button" class="vis-btn" data-vis="private">Private</button>
         </div>
       </div>
+    </div>
 
-      <label class="lbl">ভিডিওর শিরোনাম</label>
-      <input type="text" id="vTitle" placeholder="শিরোনাম লিখুন" maxlength="120" required>
+    <section id="library" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Video Library</h2>
+            <p class="muted">Stream any published film instantly — no sign-in needed.</p>
+          </div>
+          <div class="search-box">
+            <input id="searchInput" type="search" placeholder="Search title, category, description..." aria-label="Search videos" />
+          </div>
+        </div>
 
-      <label class="lbl">বর্ণনা</label>
-      <textarea id="vDesc" rows="3" placeholder="ভিডিও সম্পর্কে লিখুন (ঐচ্ছিক)"></textarea>
+        <div id="categoryTabs" class="category-tabs">
+          <button type="button" class="cat-btn active" data-cat="All">All</button>
+          <button type="button" class="cat-btn" data-cat="Short Film">Short Film</button>
+          <button type="button" class="cat-btn" data-cat="Vlog">Vlog</button>
+          <button type="button" class="cat-btn" data-cat="Tutorial">Tutorial</button>
+          <button type="button" class="cat-btn" data-cat="Showreel">Showreel</button>
+          <button type="button" class="cat-btn" data-cat="Music & Audio">Music &amp; Audio</button>
+          <button type="button" class="cat-btn" data-cat="Archive">Archive</button>
+        </div>
 
-      <label class="lbl">এই ভিডিওতে কোন অ্যাড চলবে?</label>
-      <div class="checks">
-        <label><input type="checkbox" id="adPre" checked> শুরুতে</label>
-        <label><input type="checkbox" id="adMid" checked> মাঝে</label>
-        <label><input type="checkbox" id="adPost" checked> শেষে</label>
+        <div id="videoGrid" class="video-grid"></div>
+      </div>
+    </section>
+
+    <section id="referrals" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Recommended &amp; Partner Links</h2>
+            <p class="muted">Curated links, creator offers, and referral invites.</p>
+          </div>
+          <button id="btnCopySiteRef" type="button" class="btn btn-ghost btn-sm">Copy Invite (?ref=CPILHE)</button>
+        </div>
+
+        <div id="referralGrid" class="ref-grid"></div>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <div class="container">
+        <div class="about-card">
+          <div>
+            <span class="eyebrow">Creator Studio</span>
+            <h2 id="aboutOwnerName">Jahid Hasan</h2>
+            <p id="aboutBio" class="hero-bio">
+              My-Plixer is a private-creator, public-viewer video showcase. Visitors from anywhere can stream and explore every published film without an account, while uploads and catalog curation remain strictly locked to the verified creator.
+            </p>
+            <div class="about-meta">
+              <span>Verified Creator: <code>jahidhasan112328@gmail.com</code></span>
+              <span>Static Host Ready (HTML + CSS + JS)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>&copy; 2026 <strong id="footerChannelName">My-Plixer</strong> · Jahid Hasan</span>
+      <span class="muted">Public Showcase · Firebase Secured</span>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- Video Player + 5s Pre-Roll & Mid-Roll Ad Modal -->
+  <div id="playerModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-box modal-lg">
+      <div class="modal-head">
+        <div>
+          <h3 id="playerTitle">Video Title</h3>
+          <p id="playerMeta" class="muted"></p>
+        </div>
+        <button id="btnClosePlayer" type="button" class="modal-close" aria-label="Close player">&times;</button>
       </div>
 
-      <button class="btn" type="submit" id="saveBtn">ভিডিও পাবলিশ করুন</button>
-    </form>
-  </section>
+      <div class="player-layout">
+        <div>
+          <div class="player-stage">
+            <div id="videoFrameWrap" class="video-frame-wrap"></div>
 
-  <!-- অ্যাড সেটিংস -->
-  <section id="tab-ads" class="tab">
-    <h2>অ্যাড সেটিংস</h2>
-    <p class="muted">শুরু, মাঝ ও শেষ — প্রতিটির জন্য আলাদা অ্যাড দিন। দর্শক অ্যাড শেষ না হওয়া পর্যন্ত ভিডিও দেখতে পারবেন না (ডিফল্ট ৫ সেকেন্ড)।</p>
-    <div id="adSlots" class="adgrid"></div>
-  </section>
+            <div id="adOverlay" class="ad-overlay hidden">
+              <div class="ad-badge-row">
+                <span id="adPhaseLabel" class="ad-phase">Pre-Roll Sponsor</span>
+                <span id="adTimerBadge" class="ad-timer">Resumes in 5s</span>
+              </div>
+              <div id="adImageWrap" class="ad-image-wrap hidden">
+                <img id="adImage" alt="Sponsor Banner" />
+              </div>
+              <h4 id="adTitle">Featured Partner Spotlight</h4>
+              <p id="adDescription" class="muted"></p>
+              <a id="adCtaLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm hidden">Visit Partner ↗</a>
+            </div>
+          </div>
 
-  <!-- ড্যাশবোর্ড -->
-  <section id="tab-dashboard" class="tab">
-    <h2>ড্যাশবোর্ড</h2>
-    <div class="stats" id="stats"></div>
-    <div class="two">
-      <div class="card">
-        <h3>ভিডিও অনুযায়ী ভিউ</h3>
-        <div class="table-wrap"><table id="videoTable"></table></div>
-      </div>
-      <div class="card">
-        <h3>সাম্প্রতিক ইউজার</h3>
-        <div class="table-wrap"><table id="userTable"></table></div>
+          <div class="player-info">
+            <p id="playerDesc"></p>
+            <div class="modal-actions">
+              <button id="btnShareVideo" type="button" class="btn btn-ghost btn-sm">Share Link</button>
+              <div id="playerOwnerActions" class="hidden">
+                <button id="btnEditActive" type="button" class="btn btn-ghost btn-sm">Edit</button>
+                <button id="btnDeleteActive" type="button" class="btn btn-danger btn-sm">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="player-sidebar">
+          <h4>Up Next</h4>
+          <div id="upNextList" class="upnext-list"></div>
+        </aside>
       </div>
     </div>
-  </section>
-
-  <!-- রেফার -->
-  <section id="tab-refer" class="tab">
-    <h2>রেফার লিংক</h2>
-    <div class="card">
-      <label class="lbl">আপনার রেফার লিংক</label>
-      <div class="copybox">
-        <input type="text" id="refLink" readonly>
-        <button class="btn" id="copyRef">কপি</button>
-      </div>
-      <p class="muted">এই লিংকে ঢুকে কেউ সাইটে যুক্ত হলে সে আপনার রেফারেল হিসেবে গণ্য হবে।</p>
-      <div class="stats small" id="refStats"></div>
-    </div>
-    <div class="card">
-      <h3>রেফার লিডারবোর্ড</h3>
-      <div class="table-wrap"><table id="refTable"></table></div>
-    </div>
-  </section>
-
-</main>
-
-<!-- ভিডিও প্লেয়ার -->
-<div class="modal hidden" id="playerModal">
-  <div class="player-box">
-    <button class="close" id="closePlayer" aria-label="বন্ধ করুন">✕</button>
-    <div class="stage">
-      <video id="mainVideo" controls playsinline></video>
-      <div class="adlayer hidden" id="adLayer">
-        <div class="adtag" id="adLabel">অ্যাড</div>
-        <div class="adcontent" id="adContent"></div>
-        <div class="adcount" id="adCount"></div>
-      </div>
-    </div>
-    <h3 id="pTitle"></h3>
-    <p class="muted" id="pMeta"></p>
-    <p id="pDesc"></p>
   </div>
-</div>
 
-<!-- জয়েন মডাল -->
-<div class="modal hidden" id="joinModal">
-  <form class="join-box" id="joinForm">
-    <div class="logo big"><span class="logo-dot"></span>ভিডিও<b>হাব</b></div>
-    <h3>স্বাগতম! সাইটে যুক্ত হোন</h3>
-    <p class="muted" id="joinNote">আপনার নাম লিখে শুরু করুন।</p>
-    <input type="text" id="joinName" placeholder="আপনার নাম" maxlength="40" required>
-    <button class="btn" type="submit">যুক্ত হোন</button>
-  </form>
-</div>
+  <!-- Add / Edit Video Modal -->
+  <div id="uploadModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="uploadModalTitle">Add Video</h3>
+        <button id="btnCloseUpload" type="button" class="modal-close" aria-label="Close">&times;</button>
+      </div>
+      <form id="uploadForm" class="form-grid">
+        <input id="vId" type="hidden" />
+        <label class="field">
+          <span>Title *</span>
+          <input id="vTitle" type="text" maxlength="140" required placeholder="e.g., Monsoon Night Short Film" />
+        </label>
+        <div class="field-row">
+          <label class="field">
+            <span>Source Type</span>
+            <select id="vSourceType">
+              <option value="youtube">YouTube URL</option>
+              <option value="direct">Direct MP4 / WebM URL</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Category</span>
+            <select id="vCategory">
+              <option value="Short Film">Short Film</option>
+              <option value="Vlog">Vlog</option>
+              <option value="Tutorial">Tutorial</option>
+              <option value="Showreel">Showreel</option>
+              <option value="Music & Audio">Music &amp; Audio</option>
+              <option value="Archive">Archive</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">
+          <span>Video URL *</span>
+          <input id="vVideoUrl" type="url" required placeholder="https://www.youtube.com/watch?v=... or https://.../video.mp4" />
+        </label>
+        <label class="field">
+          <span>Thumbnail Image URL (Optional for YouTube)</span>
+          <input id="vThumbUrl" type="url" placeholder="https://..." />
+        </label>
+        <div class="field-row">
+          <label class="field">
+            <span>Duration</span>
+            <input id="vDuration" type="text" maxlength="24" value="05:00" placeholder="05:30" />
+          </label>
+          <label class="field">
+            <span>Visibility</span>
+            <select id="vVisibility">
+              <option value="public">Public (Everyone)</option>
+              <option value="private">Private (Owner Only)</option>
+            </select>
+          </label>
+        </div>
+        <label class="check-row">
+          <input id="vFeatured" type="checkbox" />
+          <span>Pin as Hero Featured Spotlight</span>
+        </label>
+        <label class="field">
+          <span>Description</span>
+          <textarea id="vDescription" rows="3" maxlength="2000" placeholder="Write a short synopsis..."></textarea>
+        </label>
+        <p id="uploadError" class="form-error"></p>
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">Save Video</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-<div class="toast" id="toast"></div>
+  <!-- Ad Settings Modal -->
+  <div id="adSettingsModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>Pre-Roll &amp; Mid-Roll Ad Settings</h3>
+        <button id="btnCloseAdSettings" type="button" class="modal-close" aria-label="Close">&times;</button>
+      </div>
+      <form id="adSettingsForm" class="form-grid">
+        <div class="field-row">
+          <label class="check-row">
+            <input id="adPreEnabled" type="checkbox" checked />
+            <span>Enable Pre-Roll Ad</span>
+          </label>
+          <label class="field">
+            <span>Pre-Roll Seconds (1–60)</span>
+            <input id="adPreSeconds" type="number" min="1" max="60" value="5" />
+          </label>
+        </div>
+        <div class="field-row">
+          <label class="check-row">
+            <input id="adMidEnabled" type="checkbox" checked />
+            <span>Enable Mid-Roll Ad</span>
+          </label>
+          <label class="field">
+            <span>Mid-Roll Seconds (1–60)</span>
+            <input id="adMidSeconds" type="number" min="1" max="60" value="5" />
+          </label>
+        </div>
+        <label class="field">
+          <span>Mid-Roll Trigger Point (% of Video, 10–90)</span>
+          <input id="adMidPercent" type="number" min="10" max="90" value="50" />
+        </label>
+        <label class="field">
+          <span>Sponsor Title *</span>
+          <input id="adInputTitle" type="text" maxlength="120" required />
+        </label>
+        <label class="field">
+          <span>Sponsor Description</span>
+          <textarea id="adInputDesc" rows="2" maxlength="400"></textarea>
+        </label>
+        <label class="field">
+          <span>Sponsor Banner Image URL</span>
+          <input id="adInputImg" type="url" placeholder="https://..." />
+        </label>
+        <div class="field-row">
+          <label class="field">
+            <span>Destination Click URL</span>
+            <input id="adInputClickUrl" type="url" placeholder="https://..." />
+          </label>
+          <label class="field">
+            <span>Button CTA Text</span>
+            <input id="adInputCta" type="text" maxlength="40" value="Visit Partner" />
+          </label>
+        </div>
+        <p id="adError" class="form-error"></p>
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">Save Ad Settings</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-<script src="script.js"></script>
+  <!-- Referral Setup Modal -->
+  <div id="referralModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-box modal-lg">
+      <div class="modal-head">
+        <h3>Referral Links &amp; Invite Generator</h3>
+        <button id="btnCloseReferral" type="button" class="modal-close" aria-label="Close">&times;</button>
+      </div>
+
+      <div class="site-ref-box">
+        <label class="field">
+          <span>Your Site Referral Code (Share ?ref= link)</span>
+          <div class="site-ref-row">
+            <input id="siteRefCodeInput" type="text" value="CPILHE" maxlength="64" />
+            <button id="btnCopyCustomSiteRef" type="button" class="btn btn-primary btn-sm">Copy Invite URL</button>
+          </div>
+        </label>
+        <code id="siteRefPreview" class="ref-code"></code>
+      </div>
+
+      <form id="referralForm" class="form-grid">
+        <input id="rId" type="hidden" />
+        <div class="field-row">
+          <label class="field">
+            <span>Partner / Offer Title *</span>
+            <input id="rTitle" type="text" maxlength="120" required placeholder="e.g., Editing Gear Store" />
+          </label>
+          <label class="field">
+            <span>Referral Code *</span>
+            <input id="rCode" type="text" maxlength="64" value="CPILHE" required />
+          </label>
+        </div>
+        <label class="field">
+          <span>Referral URL *</span>
+          <input id="rUrl" type="url" maxlength="1000" required placeholder="https://..." />
+        </label>
+        <div class="field-row">
+          <label class="field">
+            <span>Reward / Offer Badge</span>
+            <input id="rReward" type="text" maxlength="120" placeholder="e.g., 20% Off" />
+          </label>
+          <label class="field">
+            <span>Category</span>
+            <select id="rCategory">
+              <option value="Site Share">Site Share</option>
+              <option value="Partner Offer">Partner Offer</option>
+              <option value="App & Tool">App &amp; Tool</option>
+              <option value="Sponsor">Sponsor</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Status</span>
+            <select id="rStatus">
+              <option value="active">Active</option>
+              <option value="hidden">Hidden</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">
+          <span>Description</span>
+          <textarea id="rDescription" rows="2" maxlength="500"></textarea>
+        </label>
+        <p id="refError" class="form-error"></p>
+        <div class="modal-actions">
+          <button id="btnResetRefForm" type="button" class="btn btn-ghost btn-sm">Clear</button>
+          <button type="submit" class="btn btn-primary btn-sm">Save Referral Link</button>
+        </div>
+      </form>
+
+      <div id="ownerReferralList" class="owner-ref-list"></div>
+    </div>
+  </div>
+
+  <!-- Channel Profile Modal -->
+  <div id="profileModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>Edit Channel Profile</h3>
+        <button id="btnCloseProfile" type="button" class="modal-close" aria-label="Close">&times;</button>
+      </div>
+      <form id="profileForm" class="form-grid">
+        <label class="field">
+          <span>Channel Name *</span>
+          <input id="pChannelName" type="text" maxlength="80" required />
+        </label>
+        <label class="field">
+          <span>Owner Name *</span>
+          <input id="pOwnerName" type="text" maxlength="80" required />
+        </label>
+        <label class="field">
+          <span>Tagline *</span>
+          <input id="pTagline" type="text" maxlength="200" required />
+        </label>
+        <label class="field">
+          <span>Bio *</span>
+          <textarea id="pBio" rows="4" maxlength="1200" required></textarea>
+        </label>
+        <p id="profileError" class="form-error"></p>
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">Save Channel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-box modal-sm">
+      <h3>Delete Video?</h3>
+      <p class="muted">Are you sure you want to permanently remove <strong id="deleteTargetTitle"></strong>?</p>
+      <div class="modal-actions">
+        <button id="btnCancelDelete" type="button" class="btn btn-ghost btn-sm">Cancel</button>
+        <button id="btnConfirmDelete" type="button" class="btn btn-danger btn-sm">Delete Forever</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
 </body>
 </html>
